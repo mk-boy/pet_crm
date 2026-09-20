@@ -1,12 +1,8 @@
 <section class="space-y-6">
     <header>
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-            {{ __('profile.delete_account') }}
-        </h2>
+        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ __('profile.delete_account') }}</h2>
 
-        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            {{ __('profile.delete_description') }}
-        </p>
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ __('profile.delete_description') }}</p>
     </header>
 
     <x-danger-button
@@ -23,9 +19,7 @@
                 {{ __('profile.delete_confirm_title') }}
             </h2>
 
-            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                {{ __('profile.delete_confirm_description') }}
-            </p>
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ __('profile.delete_confirm_description') }}</p>
 
             <div class="mt-6">
                 <x-input-label for="password" value="{{ __('fields.password') }}" class="sr-only" />
@@ -42,13 +36,9 @@
             </div>
 
             <div class="mt-6 flex justify-end">
-                <x-secondary-button x-on:click="$dispatch('close')">
-                    {{ __('common.cancel') }}
-                </x-secondary-button>
+                <x-secondary-button x-on:click="$dispatch('close')"> {{ __('common.cancel') }} </x-secondary-button>
 
-                <x-danger-button class="ms-3">
-                    {{ __('profile.delete_account') }}
-                </x-danger-button>
+                <x-danger-button class="ms-3"> {{ __('profile.delete_account') }} </x-danger-button>
             </div>
         </form>
     </x-modal>

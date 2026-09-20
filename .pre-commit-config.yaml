@@ -1,0 +1,16 @@
+repos:
+  - repo: local
+    hooks:
+      - id: laravel-pint
+        name: Laravel Pint (PHP)
+        entry: php vendor/bin/pint
+        language: system
+        types: [php]
+        pass_filenames: true
+
+      - id: laravel-pint-blade
+        name: Laravel Pint (Blade)
+        entry: php vendor/bin/pint --blade
+        language: system
+        files: \.blade\.php$
+        pass_filenames: true

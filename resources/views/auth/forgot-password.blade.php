@@ -1,7 +1,5 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('auth.forgot_password_intro') }}
-    </div>
+    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">{{ __('auth.forgot_password_intro') }}</div>
 
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
@@ -12,14 +10,20 @@
         <!-- Email Address -->
         <div>
             <x-input-label for="email" :value="__('fields.email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+            <x-text-input
+                id="email"
+                class="mt-1 block w-full"
+                type="email"
+                name="email"
+                :value="old('email')"
+                required
+                autofocus
+            />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('auth.email_reset_link') }}
-            </x-primary-button>
+        <div class="mt-4 flex items-center justify-end">
+            <x-primary-button> {{ __('auth.email_reset_link') }} </x-primary-button>
         </div>
     </form>
 </x-guest-layout>
