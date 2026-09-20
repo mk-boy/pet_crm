@@ -6,5 +6,6 @@ return [
     'saved' => 'Saved.',
     'cancel' => 'Cancel',
     'confirm' => 'Confirm',
+    'close' => 'Close',
 
 ];
