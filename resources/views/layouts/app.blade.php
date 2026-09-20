@@ -28,5 +28,8 @@
         <!-- Page Content -->
         <main>{{ $slot }}</main>
     </div>
+
+    <!-- Всплывающая уведа -->
+    <x-toast />
 </body>
 </html>
