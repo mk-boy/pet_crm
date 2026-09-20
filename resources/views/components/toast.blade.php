@@ -1,4 +1,4 @@
-@if (session('status'))
+@if (session('toast'))
     <div
         x-data="{ show: true }"
         x-show="show"
@@ -12,7 +12,7 @@
         class="fixed bottom-5 right-5 z-50 flex w-full max-w-sm items-center justify-between rounded-lg border border-gray-700 bg-gray-900 px-4 py-3 text-white shadow-lg"
     >
         <div class="dynamic-text flex items-center text-sm font-medium">
-            <span>{{ session('status') }}</span>
+            <span>{{ session('toast') }}</span>
         </div>
 
         <button @click="show = false" class="ml-4 text-gray-400 transition hover:text-white">

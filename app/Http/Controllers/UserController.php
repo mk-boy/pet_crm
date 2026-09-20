@@ -44,7 +44,7 @@ class UserController extends Controller
     {
         User::create($request->validated());
 
-        return redirect()->route('users.index')->with('status', __('users.created'));
+        return redirect()->route('users.index')->with('toast', __('users.created'));
     }
 
     /**
