@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Role;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 
 class UserController extends Controller
 {
@@ -30,15 +32,19 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $roles = Role::orderBy('role_name')->pluck('role_name', 'id');
+
+        return view('users.create', compact('roles'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request)
+    public function store(StoreUserRequest $request): RedirectResponse
     {
-        //
+        User::create($request->validated());
+
+        return redirect()->route('users.index')->with('status', __('users.created'));
     }
 
     /**
