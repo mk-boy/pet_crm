@@ -8,6 +8,7 @@
     <x-card class="max-w-xl">
         <form method="post" action="{{ route('users.update', $user->id) }}" class="space-y-5">
             @csrf
+            @method('PATCH')
 
             <div>
                 <x-input-label for="name" :value="__('fields.name')" />
