@@ -46,7 +46,6 @@
                     name="password"
                     type="password"
                     class="mt-1.5 w-full"
-                    required
                     autocomplete="new-password"
                 />
                 <x-input-error class="mt-2" :messages="$errors->get('password')" />
