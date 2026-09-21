@@ -56,15 +56,7 @@
                 <x-input-label for="role" :value="__('fields.role')" />
                 <x-select-input id="role" name="role_id" class="mt-1.5 w-full" required>
                     @foreach ($roles as $role_id => $role_name)
-                        @if ($user->role_id === $role_id)
-                            <option selected value="{{ $role_id }}" @selected(old('role_id') == $role_id)>
-                                {{ $role_name }}
-                            </option>
-                        @else
-                            <option value="{{ $role_id }}" @selected(old('role_id') == $role_id)>
-                                {{ $role_name }}
-                            </option>
-                        @endif
+                        <option value="{{ $role_id }}" @selected($user->role_id === $role_id)>{{ $role_name }}</option>
                     @endforeach
                 </x-select-input>
                 <x-input-error class="mt-2" :messages="$errors->get('role_id')" />
