@@ -1,4 +1,4 @@
-<nav class="border-b border-separator bg-surface">
+<nav class="border-b border-separator bg-surface [view-transition-name:site-nav]">
     <div class="mx-auto flex h-14 max-w-7xl items-center gap-2 px-4 sm:gap-6 sm:px-6 lg:px-8">
         <a href="{{ route('dashboard') }}" class="shrink-0 rounded-lg">
             <x-application-logo class="h-8 w-auto fill-current text-label" />

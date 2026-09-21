@@ -53,6 +53,11 @@
         }
     }
 
+    /* Место под скроллбар резервируется всегда: контент не прыгает между короткими и длинными страницами и при открытии модалки */
+    html {
+        scrollbar-gutter: stable;
+    }
+
     body {
         @apply bg-bg text-label;
     }
@@ -61,5 +66,21 @@
     :focus-visible {
         outline: 2px solid rgb(var(--accent));
         outline-offset: 2px;
+    }
+}
+
+/*
+ * Плавная смена страниц при обычной навигации (cross-document View Transitions).
+ * Короткий кроссфейд: переход между разделами — частое действие, анимация не должна тормозить.
+ * Навигация помечена view-transition-name и остаётся на месте. Браузеры без поддержки игнорируют правило.
+ */
+@media (prefers-reduced-motion: no-preference) {
+    @view-transition {
+        navigation: auto;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation-duration: 150ms;
     }
 }
