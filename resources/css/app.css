@@ -25,17 +25,17 @@
 
     @media (prefers-color-scheme: dark) {
         :root {
-            --bg: 15 15 16;
-            --surface: 28 28 30;
-            --label: 245 245 247; /* 15.6:1 */
-            --label-2: 161 161 166; /* 6.6:1 */
+            --bg: 28 28 30; /* base */
+            --surface: 44 44 46; /* elevated, 1.22:1 к bg */
+            --label: 245 245 247; /* 12.8:1 */
+            --label-2: 174 174 178; /* 6.3:1 */
             --separator: 255 255 255 / 0.12;
-            --field: 110 110 115; /* 3.4:1 */
-            --accent: 165 180 252; /* 8.5:1 */
+            --field: 142 142 147; /* 4.3:1 */
+            --accent: 165 180 252; /* 7.0:1 */
             --on-accent: 15 15 16;
-            --danger: 255 107 107; /* 6.1:1 */
+            --danger: 255 107 107; /* 5.0:1 */
             --on-danger: 15 15 16;
-            --success: 74 222 128; /* 9.8:1 */
+            --success: 74 222 128; /* 8.0:1 */
         }
     }
 
@@ -48,8 +48,8 @@
 
     @media (prefers-contrast: more) and (prefers-color-scheme: dark) {
         :root {
-            --label-2: 199 199 204;
-            --field: 152 152 157;
+            --label-2: 199 199 204; /* 8.3:1 */
+            --field: 152 152 157; /* 4.9:1 */
         }
     }
 
