@@ -1,44 +1,46 @@
-<section class="space-y-6">
+<section>
     <header>
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">{{ __('profile.delete_account') }}</h2>
-
-        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ __('profile.delete_description') }}</p>
+        <h2 class="text-lg font-semibold text-label">{{ __('profile.delete_account') }}</h2>
+        <p class="mt-1 text-sm text-label-2">{{ __('profile.delete_description') }}</p>
     </header>
 
-    <x-danger-button
-        x-data=""
-        x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
-    >{{ __('profile.delete_account') }}</x-danger-button>
+    <div class="mt-6 flex justify-end">
+        <x-danger-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')">
+            {{ __('profile.delete_account') }}
+        </x-danger-button>
+    </div>
 
-    <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
+    <x-modal
+        name="confirm-user-deletion"
+        labelledby="confirm-user-deletion-title"
+        :show="$errors->userDeletion->isNotEmpty()"
+        maxWidth="lg"
+        focusable
+    >
         <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
             @csrf
             @method('delete')
 
-            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+            <h2 id="confirm-user-deletion-title" class="text-lg font-semibold text-label">
                 {{ __('profile.delete_confirm_title') }}
             </h2>
-
-            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">{{ __('profile.delete_confirm_description') }}</p>
+            <p class="mt-1 text-sm text-label-2">{{ __('profile.delete_confirm_description') }}</p>
 
             <div class="mt-6">
-                <x-input-label for="password" value="{{ __('fields.password') }}" class="sr-only" />
-
+                <x-input-label for="delete_user_password" :value="__('fields.password')" />
                 <x-text-input
-                    id="password"
+                    id="delete_user_password"
                     name="password"
                     type="password"
-                    class="mt-1 block w-3/4"
-                    placeholder="{{ __('fields.password') }}"
+                    class="mt-1.5 w-full"
+                    autocomplete="current-password"
                 />
-
                 <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
             </div>
 
-            <div class="mt-6 flex justify-end">
-                <x-secondary-button x-on:click="$dispatch('close')"> {{ __('common.cancel') }} </x-secondary-button>
-
-                <x-danger-button class="ms-3"> {{ __('profile.delete_account') }} </x-danger-button>
+            <div class="mt-6 flex justify-end gap-3">
+                <x-secondary-button x-on:click="$dispatch('close')">{{ __('common.cancel') }}</x-secondary-button>
+                <x-danger-button>{{ __('profile.delete_account') }}</x-danger-button>
             </div>
         </form>
     </x-modal>

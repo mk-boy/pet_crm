@@ -1,12 +1,12 @@
-<div class="overflow-hidden bg-white shadow sm:rounded-lg dark:bg-gray-800">
+<div class="overflow-hidden rounded-2xl bg-surface shadow-sm ring-1 ring-separator">
     <div class="overflow-x-auto">
-        <table {{ $attributes->merge(['class' => 'min-w-full divide-y divide-gray-200 dark:divide-gray-700 [&_th]:px-6 [&_th]:py-3 [&_th]:text-start [&_th]:text-xs [&_th]:font-medium [&_th]:uppercase [&_th]:tracking-widest [&_th]:text-gray-500 dark:[&_th]:text-gray-400 [&_td]:px-6 [&_td]:py-4 [&_td]:text-sm [&_td]:text-gray-900 dark:[&_td]:text-gray-100']) }}>
-            <thead class="bg-gray-50 dark:bg-gray-900/50">
+        <table {{ $attributes->merge(['class' => 'min-w-full divide-y divide-separator [&_td]:px-4 [&_td]:py-3 [&_td]:text-sm [&_td]:text-label [&_th]:px-4 [&_th]:py-3 [&_th]:text-start [&_th]:text-sm [&_th]:font-medium [&_th]:text-label-2 sm:[&_td]:px-6 sm:[&_th]:px-6']) }}>
+            <thead>
                 <tr>
                     {{ $head }}
                 </tr>
             </thead>
-            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody class="divide-y divide-separator">
                 {{ $slot }}
             </tbody>
         </table>

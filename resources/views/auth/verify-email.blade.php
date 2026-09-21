@@ -1,30 +1,26 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">{{ __('auth.verify_email_intro') }}</div>
+    <x-slot:title>{{ __('auth.verify_email_title') }}</x-slot:title>
+
+    <h1 class="text-xl font-semibold tracking-tight text-label">{{ __('auth.verify_email_title') }}</h1>
+    <p class="mt-2 text-sm text-label-2">{{ __('auth.verify_email_intro') }}</p>
 
     @if (session('status') == 'verification-link-sent')
-        <div class="mb-4 text-sm font-medium text-green-600 dark:text-green-400">
-            {{ __('auth.verification_link_sent') }}
-        </div>
+        <x-auth-session-status class="mt-4" :status="__('auth.verification_link_sent')" />
     @endif
 
-    <div class="mt-4 flex items-center justify-between">
-        <form method="POST" action="{{ route('verification.send') }}">
-            @csrf
-
-            <div>
-                <x-primary-button> {{ __('auth.resend_verification') }} </x-primary-button>
-            </div>
-        </form>
-
+    <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
         <form method="POST" action="{{ route('logout') }}">
             @csrf
 
-            <button
-                type="submit"
-                class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
-            >
+            <button type="submit" class="rounded text-sm font-medium text-accent hover:underline">
                 {{ __('menu.logout') }}
             </button>
+        </form>
+
+        <form method="POST" action="{{ route('verification.send') }}" class="ms-auto">
+            @csrf
+
+            <x-primary-button>{{ __('auth.resend_verification') }}</x-primary-button>
         </form>
     </div>
 </x-guest-layout>

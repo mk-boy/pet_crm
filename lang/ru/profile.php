@@ -5,7 +5,7 @@ return [
     'information' => 'Информация профиля',
     'information_description' => 'Обновите имя и email вашей учётной записи.',
     'email_unverified' => 'Ваш email не подтверждён.',
-    'resend_verification_link' => 'Нажмите здесь, чтобы отправить письмо с подтверждением повторно.',
+    'resend_verification_link' => 'Отправить письмо ещё раз',
     'verification_sent' => 'Новая ссылка для подтверждения отправлена на ваш email.',
 
     'update_password' => 'Обновить пароль',

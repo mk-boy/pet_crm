@@ -5,7 +5,7 @@ return [
     'information' => 'Profile Information',
     'information_description' => "Update your account's profile information and email address.",
     'email_unverified' => 'Your email address is unverified.',
-    'resend_verification_link' => 'Click here to re-send the verification email.',
+    'resend_verification_link' => 'Resend verification email',
     'verification_sent' => 'A new verification link has been sent to your email address.',
 
     'update_password' => 'Update Password',

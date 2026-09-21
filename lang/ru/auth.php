@@ -7,6 +7,11 @@ return [
     'throttle' => 'Слишком много попыток входа. Повторите попытку через :seconds сек.',
 
     'login' => 'Войти',
+    'login_title' => 'Вход',
+    'forgot_password_title' => 'Сброс пароля',
+    'reset_password_title' => 'Новый пароль',
+    'confirm_password_title' => 'Подтверждение пароля',
+    'verify_email_title' => 'Подтвердите email',
     'register' => 'Регистрация',
     'remember_me' => 'Запомнить меня',
     'forgot_password' => 'Забыли пароль?',

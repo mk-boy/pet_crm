@@ -1,64 +1,71 @@
 <x-app-layout>
+    <x-slot:title>{{ __('menu.users_create') }}</x-slot:title>
+
     <x-slot name="header">
-        <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-            {{ __('menu.users_create') }}
-        </h2>
+        <h1 class="text-2xl font-semibold tracking-tight text-label">{{ __('menu.users_create') }}</h1>
     </x-slot>
 
-    <div class="py-12">
-        <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-            <form method="post" action="{{ route('users.store') }}">
-                @csrf
+    <x-card class="max-w-xl">
+        <form method="post" action="{{ route('users.store') }}" class="space-y-5">
+            @csrf
 
-                <div>
-                    <x-input-label for="name" :value="__('fields.name')" />
-                    <x-text-input
-                        id="name"
-                        name="name"
-                        type="text"
-                        class="mt-1 block w-full"
-                        required
-                        autofocus
-                        autocomplete="name"
-                    />
-                    <x-input-error class="mt-2" :messages="$errors->get('name')" />
-                </div>
+            <div>
+                <x-input-label for="name" :value="__('fields.name')" />
+                <x-text-input
+                    id="name"
+                    name="name"
+                    type="text"
+                    class="mt-1.5 w-full"
+                    :value="old('name')"
+                    required
+                    autofocus
+                    autocomplete="name"
+                />
+                <x-input-error class="mt-2" :messages="$errors->get('name')" />
+            </div>
 
-                <div class="mt-2">
-                    <x-input-label for="email" :value="__('fields.email')" />
-                    <x-text-input
-                        id="email"
-                        name="email"
-                        type="email"
-                        class="mt-1 block w-full"
-                        required
-                        autocomplete="username"
-                    />
-                    <x-input-error class="mt-2" :messages="$errors->get('email')" />
-                </div>
+            <div>
+                <x-input-label for="email" :value="__('fields.email')" />
+                <x-text-input
+                    id="email"
+                    name="email"
+                    type="email"
+                    class="mt-1.5 w-full"
+                    :value="old('email')"
+                    placeholder="name@example.com"
+                    required
+                    autocomplete="off"
+                />
+                <x-input-error class="mt-2" :messages="$errors->get('email')" />
+            </div>
 
-                <div class="mt-2">
-                    <x-input-label for="password" :value="__('fields.password')" />
+            <div>
+                <x-input-label for="password" :value="__('fields.password')" />
+                <x-text-input
+                    id="password"
+                    name="password"
+                    type="password"
+                    class="mt-1.5 w-full"
+                    required
+                    autocomplete="new-password"
+                />
+                <x-input-error class="mt-2" :messages="$errors->get('password')" />
+            </div>
 
-                    <x-text-input id="password" class="mt-1 block w-full" type="password" name="password" required />
+            <div>
+                <x-input-label for="role" :value="__('fields.role')" />
+                <x-select-input id="role" name="role_id" class="mt-1.5 w-full" required>
+                    @foreach ($roles as $role_id => $role_name)
+                        <option value="{{ $role_id }}" @selected(old('role_id') == $role_id)>{{ $role_name }}</option>
+                    @endforeach
+                </x-select-input>
+                <x-input-error class="mt-2" :messages="$errors->get('role_id')" />
+            </div>
 
-                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                </div>
-
-                <div class="mt-2">
-                    <x-input-label for="role" :value="__('fields.role')" />
-
-                    <x-select-input id="role" class="mt-1 block w-full" name="role_id" required>
-                        @foreach ($roles as $role_id => $role_name)
-                            <option value="{{ $role_id }}">{{ $role_name }}</option>
-                        @endforeach
-                    </x-select-input>
-                </div>
-
-                <div class="mt-5">
-                    <x-primary-button>{{ __('common.save') }}</x-primary-button>
-                </div>
-            </form>
-        </div>
-    </div>
+            <div class="flex items-center justify-end gap-3 pt-2">
+                <x-secondary-link :href="route('users.index')">{{ __('common.cancel') }}</x-secondary-link>
+                <x-primary-button>{{ __('users.create') }}</x-primary-button>
+            </div>
+        </form>
+    </x-card>
 </x-app-layout>
