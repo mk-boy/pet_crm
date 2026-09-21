@@ -1,3 +1,59 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+ * Дизайн-токены: RGB-каналы, чтобы работали модификаторы прозрачности (bg-accent/10).
+ * Контраст указан против surface.
+ */
+@layer base {
+    :root {
+        color-scheme: light dark;
+
+        --bg: 245 245 247;
+        --surface: 255 255 255;
+        --label: 29 29 31; /* 16.8:1 */
+        --label-2: 110 110 115; /* 5.07:1 */
+        --separator: 0 0 0 / 0.1;
+        --field: 142 142 147; /* 3.26:1 — граница поля */
+        --accent: 67 56 202; /* 7.9:1 */
+        --on-accent: 255 255 255;
+        --danger: 196 22 28; /* 6.0:1 */
+        --on-danger: 255 255 255;
+        --success: 31 122 55; /* 5.4:1 */
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --bg: 15 15 16;
+            --surface: 28 28 30;
+            --label: 245 245 247; /* 15.6:1 */
+            --label-2: 161 161 166; /* 6.6:1 */
+            --separator: 255 255 255 / 0.12;
+            --field: 110 110 115; /* 3.4:1 */
+            --accent: 165 180 252; /* 8.5:1 */
+            --on-accent: 15 15 16;
+            --danger: 255 107 107; /* 6.1:1 */
+            --on-danger: 15 15 16;
+            --success: 74 222 128; /* 9.8:1 */
+        }
+    }
+
+    @media (prefers-contrast: more) {
+        :root {
+            --label-2: 72 72 76;
+            --field: 99 99 102;
+        }
+    }
+
+    @media (prefers-contrast: more) and (prefers-color-scheme: dark) {
+        :root {
+            --label-2: 199 199 204;
+            --field: 152 152 157;
+        }
+    }
+
+    body {
+        @apply bg-bg text-label;
+    }
+}
