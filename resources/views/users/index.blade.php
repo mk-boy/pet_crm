@@ -23,6 +23,7 @@
                 <th scope="col">{{ __('fields.name') }}</th>
                 <th scope="col" class="hidden sm:table-cell">{{ __('fields.email') }}</th>
                 <th scope="col">{{ __('fields.role') }}</th>
+                <th scope="col"><span class="sr-only">{{ __('fields.actions') }}</span></th>
             </x-slot:head>
 
             @foreach ($users as $user)
@@ -45,6 +46,16 @@
                         @else
                             <span class="text-label-2">{{ __('users.no_role') }}</span>
                         @endif
+                    </td>
+                    <td class="w-px text-end">
+                        <a
+                            href="{{ route('users.edit', $user) }}"
+                            class="inline-flex size-11 items-center justify-center rounded-lg text-label-2 transition-colors hover:bg-label/5 hover:text-label active:bg-label/10 motion-reduce:transition-none sm:size-9"
+                            aria-label="{{ __('users.edit', ['name' => $user->name]) }}"
+                            title="{{ __('users.edit', ['name' => $user->name]) }}"
+                        >
+                            <x-icons.pencil />
+                        </a>
                     </td>
                 </tr>
             @endforeach
