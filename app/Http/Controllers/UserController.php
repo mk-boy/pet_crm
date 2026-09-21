@@ -60,7 +60,9 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        $roles = Role::orderBy('role_name')->pluck('role_name', 'id');
+
+        return view('users.edit', compact('roles'));
     }
 
     /**
