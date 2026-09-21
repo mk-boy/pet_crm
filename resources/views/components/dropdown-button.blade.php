@@ -1,0 +1,3 @@
+<button {{ $attributes->merge(['type' => 'submit', 'class' => 'block w-full px-4 py-2.5 text-start text-sm text-label transition-colors hover:bg-label/5 focus-visible:bg-label/5 motion-reduce:transition-none']) }}>
+    {{ $slot }}
+</button>
