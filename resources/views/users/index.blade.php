@@ -60,14 +60,23 @@
                                 </a>
                             @endcan
 
-                            <button
-                                type="button"
-                                class="inline-flex size-11 items-center justify-center rounded-lg text-label-2 transition-colors hover:bg-danger/10 hover:text-danger active:bg-danger/15 motion-reduce:transition-none sm:size-9"
-                                aria-label="{{ __('users.delete', ['name' => $user->name]) }}"
-                                title="{{ __('users.delete', ['name' => $user->name]) }}"
-                            >
-                                <x-icons.trash />
-                            </button>
+                            @can('delete', $user)
+                                <x-button
+                                    x-data
+                                    variant="ghost-danger"
+                                    size="icon"
+                                    :label="__('users.delete', ['name' => $user->name])"
+                                    x-on:click="
+                                        $dispatch('prepare-user-deletion', {
+                                            title: {{ Js::from(__('users.delete_confirm_title', ['name' => $user->name])) }},
+                                            action: {{ Js::from(route('users.destroy', $user)) }},
+                                        });
+                                        $dispatch('open-modal', 'confirm-user-deletion');
+                                    "
+                                >
+                                    <x-icons.trash />
+                                </x-button>
+                            @endcan
                         </div>
                     </td>
                 </tr>
@@ -75,5 +84,35 @@
         </x-table>
 
         <div class="mt-4">{{ $users->links() }}</div>
+
+        <x-modal
+            name="confirm-user-deletion"
+            labelledby="confirm-user-deletion-title"
+            :show="$errors->userDeletion->isNotEmpty()"
+            maxWidth="lg"
+            focusable
+        >
+            <form
+                method="post"
+                x-data="{ title: '', action: '' }"
+                x-on:prepare-user-deletion.window="
+                    title = $event.detail.title;
+                    action = $event.detail.action;
+                "
+                x-bind:action="action"
+                class="p-6"
+            >
+                @csrf
+                @method('delete')
+
+                <h2 id="confirm-user-deletion-title" class="text-lg font-semibold text-label" x-text="title"></h2>
+                <p class="mt-1 text-sm text-label-2">{{ __('users.delete_confirm_description') }}</p>
+
+                <div class="mt-6 flex justify-end gap-3">
+                    <x-secondary-button x-on:click="$dispatch('close')">{{ __('common.cancel') }}</x-secondary-button>
+                    <x-danger-button>{{ __('users.delete_confirm') }}</x-danger-button>
+                </div>
+            </form>
+        </x-modal>
     @endif
 </x-app-layout>
