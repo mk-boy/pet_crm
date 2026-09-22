@@ -60,15 +60,19 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        $roles = Role::orderBy('role_name')->pluck('role_name', 'id');
+
+        return view('users.edit', compact('roles', 'user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        //
+        $user->update($request->validated());
+
+        return redirect()->route('users.index')->with('toast', __('users.updated'));
     }
 
     /**

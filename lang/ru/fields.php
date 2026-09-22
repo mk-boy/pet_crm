@@ -9,5 +9,6 @@ return [
     'current_password' => 'Текущий пароль',
     'new_password' => 'Новый пароль',
     'role' => 'Роль',
+    'actions' => 'Действия',
 
 ];
