@@ -34,7 +34,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Сужает выборку по search_query
+     * Фильтрация выборки по search_query
      */
     #[Scope]
     protected function search(Builder $query, ?string $search_query)
@@ -44,6 +44,17 @@ class User extends Authenticatable
                 $subQuery->where('name', 'like', "%{$search_query}%")
                     ->orWhere('email', 'like', "%{$search_query}%");
             });
+        });
+    }
+
+    /**
+     * Фильтрация выборки по role_id
+     */
+    #[Scope]
+    protected function searchForRole(Builder $query, ?int $role_id)
+    {
+        $query->when($role_id, function (Builder $query, int $role_id) {
+            $query->where('role_id', $role_id);
         });
     }
 

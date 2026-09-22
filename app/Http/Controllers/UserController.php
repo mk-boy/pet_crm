@@ -23,6 +23,7 @@ class UserController extends Controller
     {
         $users = User::with('role')
             ->search($request->query('search_query'))
+            ->searchForRole($request->query('role_id'))
             ->orderBy('id', 'desc')
             ->paginate(7)
             ->withQueryString();
