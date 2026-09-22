@@ -41,8 +41,8 @@ class User extends Authenticatable
     {
         $query->when($search_query, function (Builder $query, string $search_query) {
             $query->where(function (Builder $subQuery) use ($search_query) {
-                $subQuery->where('name', 'like', "%{$search_query}%")
-                    ->orWhere('email', 'like', "%{$search_query}%");
+                $subQuery->whereLike('name', "%{$search_query}%")
+                    ->orWhereLike('email', "%{$search_query}%");
             });
         });
     }
