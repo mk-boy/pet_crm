@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -18,13 +19,21 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('role')
-            ->orderBy('id', 'desc')
-            ->paginate(15);
+        $search_query = $request->query('search_query');
+        $role_id = (int) $request->query('role_id');
 
-        return view('users.index', compact('users'));
+        $users = User::with('role')
+            ->search($search_query)
+            ->searchForRole($role_id)
+            ->orderBy('id', 'desc')
+            ->paginate(7)
+            ->withQueryString();
+
+        $roles = Role::orderBy('role_name')->pluck('role_name', 'id');
+
+        return view('users.index', compact('users', 'roles'));
     }
 
     /**

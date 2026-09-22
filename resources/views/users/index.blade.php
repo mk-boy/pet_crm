@@ -12,7 +12,49 @@
         </x-primary-link>
     </x-slot>
 
-    @if ($users->isEmpty())
+    @php
+        $isFiltered = request()->filled('search_query') || request()->filled('role_id');
+    @endphp
+
+    <form method="get" action="{{ route('users.index') }}" role="search" class="mb-4 flex flex-wrap items-center gap-3">
+        <x-search-input
+            :label="__('users.search_label')"
+            :placeholder="__('users.search_placeholder')"
+            class="min-w-48 flex-1 sm:max-w-xs"
+        />
+
+        <div>
+            <label for="role_id" class="sr-only">{{ __('users.filter_role') }}</label>
+
+            <x-select-input id="role_id" name="role_id" class="h-11 w-full sm:h-9 sm:w-48">
+                <option value="">{{ __('users.filter_role_all') }}</option>
+
+                @foreach ($roles as $id => $roleName)
+                    <option value="{{ $id }}" @selected(request('role_id') == $id)>{{ $roleName }}</option>
+                @endforeach
+            </x-select-input>
+        </div>
+
+        <x-secondary-button type="submit">{{ __('common.apply') }}</x-secondary-button>
+
+        @if ($isFiltered)
+            <x-secondary-link
+                :href="route('users.index')"
+                class="border-transparent bg-transparent text-label-2 shadow-none hover:text-label"
+            >{{ __('users.filters_reset') }}</x-secondary-link>
+        @endif
+    </form>
+
+    @if ($users->isEmpty() && $isFiltered)
+        <x-card class="text-center">
+            <h2 class="text-lg font-semibold text-label">{{ __('users.not_found') }}</h2>
+            <p class="mt-1 text-sm text-label-2">{{ __('users.not_found_hint') }}</p>
+            <x-secondary-link
+                :href="route('users.index')"
+                class="mt-4"
+            >{{ __('users.filters_reset') }}</x-secondary-link>
+        </x-card>
+    @elseif ($users->isEmpty())
         <x-card class="text-center">
             <h2 class="text-lg font-semibold text-label">{{ __('users.empty') }}</h2>
             <p class="mt-1 text-sm text-label-2">{{ __('users.empty_hint') }}</p>
@@ -48,7 +90,7 @@
                         @endif
                     </td>
                     <td class="w-px text-end">
-                        <div class="flex items-center justify-end gap-1">
+                        <div class="flex items-center justify-end gap-2 sm:gap-1">
                             @can('update', $user)
                                 <a
                                     href="{{ route('users.edit', $user) }}"

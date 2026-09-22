@@ -6,6 +6,8 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -29,6 +31,31 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Фильтрация выборки по search_query
+     */
+    #[Scope]
+    protected function search(Builder $query, ?string $search_query)
+    {
+        $query->when($search_query, function (Builder $query, string $search_query) {
+            $query->where(function (Builder $subQuery) use ($search_query) {
+                $subQuery->whereLike('name', "%{$search_query}%")
+                    ->orWhereLike('email', "%{$search_query}%");
+            });
+        });
+    }
+
+    /**
+     * Фильтрация выборки по role_id
+     */
+    #[Scope]
+    protected function searchForRole(Builder $query, ?int $role_id)
+    {
+        $query->when($role_id, function (Builder $query, int $role_id) {
+            $query->where('role_id', $role_id);
+        });
     }
 
     /**
