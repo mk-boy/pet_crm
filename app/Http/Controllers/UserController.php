@@ -27,7 +27,9 @@ class UserController extends Controller
             ->paginate(7)
             ->withQueryString();
 
-        return view('users.index', compact('users'));
+        $roles = Role::orderBy('role_name')->pluck('role_name', 'id');
+
+        return view('users.index', compact('users', 'roles'));
     }
 
     /**

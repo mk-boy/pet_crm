@@ -16,8 +16,10 @@ return [
     'no_role' => 'No role',
     'search_label' => 'Search users',
     'search_placeholder' => 'Name or email',
-    'search_reset' => 'Clear search',
+    'filters_reset' => 'Clear filters',
+    'filter_role' => 'Filter by role',
+    'filter_role_all' => 'All roles',
     'not_found' => 'No results',
-    'not_found_hint' => 'No users match “:query”. Try a different search.',
+    'not_found_hint' => 'No users match the current filters. Try a different search or role.',
 
 ];

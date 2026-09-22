@@ -4,33 +4,55 @@
     <x-slot name="header">
         <h1 class="text-2xl font-semibold tracking-tight text-label">{{ __('menu.users') }}</h1>
 
-        <div class="flex w-full items-center gap-3 sm:w-auto sm:flex-1 sm:justify-end">
-            <x-search-input
-                :action="route('users.index')"
-                :label="__('users.search_label')"
-                :placeholder="__('users.search_placeholder')"
-                class="min-w-0 flex-1 sm:w-64 sm:flex-none"
-            />
-
-            <x-primary-link :href="route('users.create')" class="shrink-0">
-                <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                    <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
-                </svg>
-                {{ __('users.create') }}
-            </x-primary-link>
-        </div>
+        <x-primary-link :href="route('users.create')">
+            <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
+            </svg>
+            {{ __('users.create') }}
+        </x-primary-link>
     </x-slot>
 
-    @if ($users->isEmpty() && request()->filled('search_query'))
+    @php
+        $isFiltered = request()->filled('search_query') || request()->filled('role_id');
+    @endphp
+
+    <form method="get" action="{{ route('users.index') }}" role="search" class="mb-4 flex flex-wrap items-center gap-3">
+        <x-search-input
+            :label="__('users.search_label')"
+            :placeholder="__('users.search_placeholder')"
+            class="min-w-48 flex-1 sm:max-w-xs"
+        />
+
+        <div>
+            <label for="role_id" class="sr-only">{{ __('users.filter_role') }}</label>
+
+            <x-select-input id="role_id" name="role_id" class="h-11 w-full sm:h-9 sm:w-48">
+                <option value="">{{ __('users.filter_role_all') }}</option>
+
+                @foreach ($roles as $id => $roleName)
+                    <option value="{{ $id }}" @selected(request('role_id') == $id)>{{ $roleName }}</option>
+                @endforeach
+            </x-select-input>
+        </div>
+
+        <x-secondary-button type="submit">{{ __('common.apply') }}</x-secondary-button>
+
+        @if ($isFiltered)
+            <x-secondary-link
+                :href="route('users.index')"
+                class="border-transparent bg-transparent text-label-2 shadow-none hover:text-label"
+            >{{ __('users.filters_reset') }}</x-secondary-link>
+        @endif
+    </form>
+
+    @if ($users->isEmpty() && $isFiltered)
         <x-card class="text-center">
             <h2 class="text-lg font-semibold text-label">{{ __('users.not_found') }}</h2>
-            <p class="mt-1 text-sm text-label-2">
-                {{ __('users.not_found_hint', ['query' => request('search_query')]) }}
-            </p>
+            <p class="mt-1 text-sm text-label-2">{{ __('users.not_found_hint') }}</p>
             <x-secondary-link
                 :href="route('users.index')"
                 class="mt-4"
-            >{{ __('users.search_reset') }}</x-secondary-link>
+            >{{ __('users.filters_reset') }}</x-secondary-link>
         </x-card>
     @elseif ($users->isEmpty())
         <x-card class="text-center">
