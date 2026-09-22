@@ -21,8 +21,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::define('access-dashboard', function (User $user) {
-            return $user->role?->role_name === 'admin';
-        });
+        Gate::define('access-dashboard', fn (User $user) => $user->role !== null);
     }
 }

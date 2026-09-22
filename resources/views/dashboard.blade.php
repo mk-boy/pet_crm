@@ -7,5 +7,9 @@
 
     <x-card>
         <p class="text-sm text-label">{{ __('dashboard.logged_in') }}</p>
+
+        @if (auth()->user()->role?->role_name === 'guest')
+            <p class="mt-2 text-sm font-bold text-label">{{ __('dashboard.guest_message') }}</p>
+        @endif
     </x-card>
 </x-app-layout>
