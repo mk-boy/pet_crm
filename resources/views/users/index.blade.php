@@ -48,14 +48,16 @@
                         @endif
                     </td>
                     <td class="w-px text-end">
-                        <a
-                            href="{{ route('users.edit', $user) }}"
-                            class="inline-flex size-11 items-center justify-center rounded-lg text-label-2 transition-colors hover:bg-label/5 hover:text-label active:bg-label/10 motion-reduce:transition-none sm:size-9"
-                            aria-label="{{ __('users.edit', ['name' => $user->name]) }}"
-                            title="{{ __('users.edit', ['name' => $user->name]) }}"
-                        >
-                            <x-icons.pencil />
-                        </a>
+                        @can('update', $user)
+                            <a
+                                href="{{ route('users.edit', $user) }}"
+                                class="inline-flex size-11 items-center justify-center rounded-lg text-label-2 transition-colors hover:bg-label/5 hover:text-label active:bg-label/10 motion-reduce:transition-none sm:size-9"
+                                aria-label="{{ __('users.edit', ['name' => $user->name]) }}"
+                                title="{{ __('users.edit', ['name' => $user->name]) }}"
+                            >
+                                <x-icons.pencil />
+                            </a>
+                        @endcan
                     </td>
                 </tr>
             @endforeach
