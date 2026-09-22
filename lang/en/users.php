@@ -14,5 +14,10 @@ return [
     'empty' => 'No users yet',
     'empty_hint' => 'Create the first user and it will appear in this list.',
     'no_role' => 'No role',
+    'search_label' => 'Search users',
+    'search_placeholder' => 'Name or email',
+    'search_reset' => 'Clear search',
+    'not_found' => 'No results',
+    'not_found_hint' => 'No users match “:query”. Try a different search.',
 
 ];
