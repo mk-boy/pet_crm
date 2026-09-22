@@ -6,6 +6,7 @@ return [
     'created' => 'User created successfully.',
     'edit' => 'Edit :name',
     'updated' => 'User information updated successfully',
+    'deleted' => 'User deleted successfully.',
     'delete' => 'Delete :name',
     'delete_confirm_title' => 'Delete :name?',
     'delete_confirm_description' => 'The user will lose access to the system. This action cannot be undone.',
