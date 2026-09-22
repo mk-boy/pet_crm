@@ -24,7 +24,7 @@ class UserController extends Controller
         $users = User::with('role')
             ->search($request->query('search_query'))
             ->orderBy('id', 'desc')
-            ->paginate(15)
+            ->paginate(7)
             ->withQueryString();
 
         return view('users.index', compact('users'));
