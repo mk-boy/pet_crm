@@ -85,13 +85,7 @@
 
         <div class="mt-4">{{ $users->links() }}</div>
 
-        <x-modal
-            name="confirm-user-deletion"
-            labelledby="confirm-user-deletion-title"
-            :show="$errors->userDeletion->isNotEmpty()"
-            maxWidth="lg"
-            focusable
-        >
+        <x-modal name="confirm-user-deletion" labelledby="confirm-user-deletion-title" maxWidth="lg" focusable>
             <form
                 method="post"
                 x-data="{ title: '', action: '' }"
