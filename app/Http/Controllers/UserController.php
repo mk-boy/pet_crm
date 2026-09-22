@@ -21,9 +21,12 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        $search_query = $request->query('search_query');
+        $role_id = (int) $request->query('role_id');
+
         $users = User::with('role')
-            ->search($request->query('search_query'))
-            ->searchForRole($request->query('role_id'))
+            ->search($search_query)
+            ->searchForRole($role_id)
             ->orderBy('id', 'desc')
             ->paginate(7)
             ->withQueryString();
