@@ -10,7 +10,6 @@ jobs:
   laravel-ci:
     runs-on: ubuntu-latest
 
-    # Поднимаем сервисный контейнер PostgreSQL для тестов
     services:
       postgres:
         image: postgres:16-alpine
@@ -58,12 +57,21 @@ jobs:
           cp .env.example .env
           php artisan key:generate
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install NPM Dependencies & Build Assets
+        run: |
+          npm ci
+          npm run build
+
       - name: Run Pint (Code Style Check)
-        # --test вернет ошибку, если код не отформатирован. --profile покажет детали в логах
         run: ./vendor/bin/pint --test -v
 
       - name: Execute Tests (PostgreSQL)
-        # Переопределяем переменные окружения для подключения к тестовой БД
         env:
           DB_CONNECTION: pgsql
           DB_HOST: 127.0.0.1
@@ -71,5 +79,4 @@ jobs:
           DB_DATABASE: pet_crm_test
           DB_USERNAME: postgres
           DB_PASSWORD: password_for_ci
-        # --github-actions выведет ошибки упавших тестов прямо в интерфейс PR (вкладка Files Changed)
         run: php artisan test
