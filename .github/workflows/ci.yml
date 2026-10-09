@@ -1,0 +1,75 @@
+name: CI Pipeline (Laravel Pet CRM)
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  laravel-ci:
+    runs-on: ubuntu-latest
+
+    # Поднимаем сервисный контейнер PostgreSQL для тестов
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: pet_crm_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password_for_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_pgsql
+          coverage: none
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install Dependencies
+        run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: Prepare Environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Run Pint (Code Style Check)
+        # --test вернет ошибку, если код не отформатирован. --profile покажет детали в логах
+        run: ./vendor/bin/pint --test --profile
+
+      - name: Execute Tests (PostgreSQL)
+        # Переопределяем переменные окружения для подключения к тестовой БД
+        env:
+          DB_CONNECTION: pgsql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 5432
+          DB_DATABASE: pet_crm_test
+          DB_USERNAME: postgres
+          DB_PASSWORD: password_for_ci
+        # --github-actions выведет ошибки упавших тестов прямо в интерфейс PR (вкладка Files Changed)
+        run: php artisan test --github-actions
