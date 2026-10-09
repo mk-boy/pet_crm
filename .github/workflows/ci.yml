@@ -60,7 +60,7 @@ jobs:
 
       - name: Run Pint (Code Style Check)
         # --test вернет ошибку, если код не отформатирован. --profile покажет детали в логах
-        run: ./vendor/bin/pint --test --profile
+        run: ./vendor/bin/pint --test -v
 
       - name: Execute Tests (PostgreSQL)
         # Переопределяем переменные окружения для подключения к тестовой БД
