@@ -76,6 +76,16 @@ class User extends Authenticatable
     }
 
     /**
+     * Проверка: есть ли у пользователя хотя бы одна из ролей
+     *
+     * @param array<int, string> $roleNames
+     */
+    public function hasAnyRole(array $roleNames): bool
+    {
+        return $this->roles->contains(fn (Role $role) => in_array($role->role_name, $roleNames, true));
+    }
+
+    /**
      * Получение роли пользователя
      */
     public function role(): BelongsTo
