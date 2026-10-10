@@ -68,6 +68,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Проверка: есть ли у пользователя нужная роль
+     */
+    public function hasRole(string $roleName): bool
+    {
+        return $this->roles->contains('role_name', $roleName);
+    }
+
+    /**
      * Получение роли пользователя
      */
     public function role(): BelongsTo
