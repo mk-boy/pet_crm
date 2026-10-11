@@ -86,7 +86,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Получение роли пользователя
+     * @deprecated Старое получение роли пользователя, сейчас актуально использовать связь roles
      */
     public function role(): BelongsTo
     {
