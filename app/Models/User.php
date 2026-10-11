@@ -103,6 +103,18 @@ class User extends Authenticatable
     }
 
     /**
+     * Синхронизация списка ролей у пользователя
+     *
+     * @param array<int, int> $roleIds
+     */
+    public function syncRoles(array $roleIds): void
+    {
+        $this->roles()->sync($roleIds);
+
+        $this->unsetRelation('roles');
+    }
+
+    /**
      * @deprecated Старое получение роли пользователя, сейчас актуально использовать связь roles
      */
     public function role(): BelongsTo
