@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use InvalidArgumentException;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -83,6 +84,22 @@ class User extends Authenticatable
     public function hasAnyRole(array $roleNames): bool
     {
         return $this->roles->contains(fn (Role $role) => in_array($role->role_name, $roleNames, true));
+    }
+
+    /**
+     * Назначение ролей пользователю
+     */
+    public function assignRole(string ...$roleNames): void
+    {
+        $roleIds = Role::whereIn('role_name', $roleNames)->pluck('id');
+
+        if (count(array_unique($roleNames)) !== $roleIds->count()) {
+            throw new InvalidArgumentException('Переданы невалидные имена ролей');
+        }
+
+        $this->roles()->syncWithoutDetaching($roleIds);
+
+        $this->unsetRelation('roles');
     }
 
     /**
