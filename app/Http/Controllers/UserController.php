@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -51,7 +52,13 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        User::create($request->validated());
+        $validated = $request->safe()->only('name', 'email', 'password');
+
+        DB::transaction(function () use ($request, $validated) {
+            $user = User::create($validated);
+
+            $user->syncRoles($request->input('role_ids'));
+        });
 
         return redirect()->route('users.index')->with('toast', __('users.created'));
     }
@@ -79,7 +86,13 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        $user->update($request->validated());
+        $validated = $request->safe()->only('name', 'email', 'password');
+
+        DB::transaction(function () use ($user, $request, $validated) {
+            $user->update($validated);
+
+            $user->syncRoles($request->input('role_ids'));
+        });
 
         return redirect()->route('users.index')->with('toast', __('users.updated'));
     }
