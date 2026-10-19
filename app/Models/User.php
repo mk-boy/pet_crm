@@ -3,7 +3,6 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use InvalidArgumentException;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -14,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use InvalidArgumentException;
 
 #[Fillable(['name', 'email', 'password', 'role_id'])]
 #[Hidden(['password', 'remember_token'])]
@@ -77,7 +77,7 @@ class User extends Authenticatable
     /**
      * Проверка: есть ли у пользователя хотя бы одна из ролей
      *
-     * @param array<int, string> $roleNames
+     * @param  array<int, string>  $roleNames
      */
     public function hasAnyRole(array $roleNames): bool
     {
@@ -103,7 +103,7 @@ class User extends Authenticatable
     /**
      * Синхронизация списка ролей у пользователя
      *
-     * @param array<int, int> $roleIds
+     * @param  array<int, int>  $roleIds
      */
     public function syncRoles(array $roleIds): void
     {
