@@ -52,9 +52,9 @@
                 <x-input-error class="mt-2" :messages="$errors->get('password')" />
             </div>
 
-            <x-checkbox-group
+            <x-multi-select
                 name="role_ids"
-                :legend="__('fields.role')"
+                :label="__('fields.role')"
                 :options="$roles"
                 :selected="old('role_ids', $user->roles->pluck('id')->all())"
                 :messages="[...$errors->get('role_ids'), ...Arr::flatten($errors->get('role_ids.*'))]"
