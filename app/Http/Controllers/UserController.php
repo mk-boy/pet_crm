@@ -57,7 +57,7 @@ class UserController extends Controller
         DB::transaction(function () use ($request, $validated) {
             $user = User::create($validated);
 
-            $user->syncRoles($request->input('role_ids'));
+            $user->syncRoles($request->validated('role_ids'));
         });
 
         return redirect()->route('users.index')->with('toast', __('users.created'));
@@ -91,7 +91,7 @@ class UserController extends Controller
         DB::transaction(function () use ($user, $request, $validated) {
             $user->update($validated);
 
-            $user->syncRoles($request->input('role_ids'));
+            $user->syncRoles($request->validated('role_ids'));
         });
 
         return redirect()->route('users.index')->with('toast', __('users.updated'));
