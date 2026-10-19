@@ -55,9 +55,7 @@ class User extends Authenticatable
     #[Scope]
     protected function searchForRole(Builder $query, ?int $role_id)
     {
-        $query->when($role_id, function (Builder $query, int $role_id) {
-            $query->where('role_id', $role_id);
-        });
+        $query->when($role_id, fn (Builder $query) => $query->whereRelation('roles', 'roles.id', $role_id));
     }
 
     /**
