@@ -81,10 +81,12 @@
                     </td>
                     <td class="hidden text-label-2 sm:table-cell">{{ $user->email }}</td>
                     <td>
-                        @if ($user->role)
-                            <span class="inline-flex rounded-full bg-label/5 px-2.5 py-0.5 text-sm font-medium">
-                                {{ $user->role->role_name }}
-                            </span>
+                        @if ($user->roles)
+                            @foreach ($user->roles as $role)
+                                <span class="inline-flex rounded-full bg-label/5 px-2.5 py-0.5 text-sm font-medium">
+                                    {{ __("roles.$role->role_name") }}
+                                </span>
+                            @endforeach
                         @else
                             <span class="text-label-2">{{ __('users.no_role') }}</span>
                         @endif

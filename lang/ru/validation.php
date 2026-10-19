@@ -170,6 +170,8 @@ return [
         'password' => 'пароль',
         'password_confirmation' => 'подтверждение пароля',
         'role_id' => 'роль',
+        'role_ids' => 'роли',
+        'role_ids.*' => 'роль',
     ],
 
 ];

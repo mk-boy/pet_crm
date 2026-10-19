@@ -52,15 +52,13 @@
                 <x-input-error class="mt-2" :messages="$errors->get('password')" />
             </div>
 
-            <div>
-                <x-input-label for="role" :value="__('fields.role')" />
-                <x-select-input id="role" name="role_id" class="mt-1.5 w-full" required>
-                    @foreach ($roles as $role_id => $role_name)
-                        <option value="{{ $role_id }}" @selected(old('role_id') == $role_id)>{{ $role_name }}</option>
-                    @endforeach
-                </x-select-input>
-                <x-input-error class="mt-2" :messages="$errors->get('role_id')" />
-            </div>
+            <x-multi-select
+                name="role_ids"
+                :label="__('fields.role')"
+                :options="$roles"
+                :selected="old('role_ids', [])"
+                :messages="[...$errors->get('role_ids'), ...Arr::flatten($errors->get('role_ids.*'))]"
+            />
 
             <div class="flex items-center justify-end gap-3 pt-2">
                 <x-secondary-link :href="route('users.index')">{{ __('common.cancel') }}</x-secondary-link>

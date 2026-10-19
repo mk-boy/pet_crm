@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -24,14 +25,14 @@ class UserController extends Controller
         $search_query = $request->query('search_query');
         $role_id = (int) $request->query('role_id');
 
-        $users = User::with('role')
+        $users = User::with('roles')
             ->search($search_query)
             ->searchForRole($role_id)
             ->orderBy('id', 'desc')
             ->paginate(7)
             ->withQueryString();
 
-        $roles = Role::orderBy('role_name')->pluck('role_name', 'id');
+        $roles = Role::options();
 
         return view('users.index', compact('users', 'roles'));
     }
@@ -41,7 +42,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::orderBy('role_name')->pluck('role_name', 'id');
+        $roles = Role::options();
 
         return view('users.create', compact('roles'));
     }
@@ -51,7 +52,13 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        User::create($request->validated());
+        $validated = $request->safe()->only('name', 'email', 'password');
+
+        DB::transaction(function () use ($request, $validated) {
+            $user = User::create($validated);
+
+            $user->syncRoles($request->validated('role_ids'));
+        });
 
         return redirect()->route('users.index')->with('toast', __('users.created'));
     }
@@ -69,7 +76,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $roles = Role::orderBy('role_name')->pluck('role_name', 'id');
+        $roles = Role::options();
 
         return view('users.edit', compact('roles', 'user'));
     }
@@ -79,7 +86,13 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        $user->update($request->validated());
+        $validated = $request->safe()->only('name', 'email', 'password');
+
+        DB::transaction(function () use ($user, $request, $validated) {
+            $user->update($validated);
+
+            $user->syncRoles($request->validated('role_ids'));
+        });
 
         return redirect()->route('users.index')->with('toast', __('users.updated'));
     }
