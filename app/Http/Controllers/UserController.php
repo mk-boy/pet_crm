@@ -32,7 +32,7 @@ class UserController extends Controller
             ->paginate(7)
             ->withQueryString();
 
-        $roles = Role::orderBy('role_name')->pluck('role_name', 'id');
+        $roles = Role::options();
 
         return view('users.index', compact('users', 'roles'));
     }
@@ -42,7 +42,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::orderBy('role_name')->pluck('role_name', 'id');
+        $roles = Role::options();
 
         return view('users.create', compact('roles'));
     }
@@ -76,7 +76,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $roles = Role::orderBy('role_name')->pluck('role_name', 'id');
+        $roles = Role::options();
 
         return view('users.edit', compact('roles', 'user'));
     }
