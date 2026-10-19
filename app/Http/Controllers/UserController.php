@@ -24,7 +24,7 @@ class UserController extends Controller
         $search_query = $request->query('search_query');
         $role_id = (int) $request->query('role_id');
 
-        $users = User::with('role')
+        $users = User::with('roles')
             ->search($search_query)
             ->searchForRole($role_id)
             ->orderBy('id', 'desc')
