@@ -15,7 +15,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use InvalidArgumentException;
 
-#[Fillable(['name', 'email', 'password', 'role_id'])]
+#[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -50,7 +50,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Фильтрация выборки по role_id
+     * Фильтрация выборки по роли
      */
     #[Scope]
     protected function searchForRole(Builder $query, ?int $role_id)
@@ -110,13 +110,5 @@ class User extends Authenticatable
         $this->roles()->sync($roleIds);
 
         $this->unsetRelation('roles');
-    }
-
-    /**
-     * @deprecated Старое получение роли пользователя, сейчас актуально использовать связь roles
-     */
-    public function role(): BelongsTo
-    {
-        return $this->belongsTo(Role::class);
     }
 }
