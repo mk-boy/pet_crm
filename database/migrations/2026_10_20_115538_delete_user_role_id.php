@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table("users", function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->dropConstrainedForeignId('role_id');
         });
     }
@@ -21,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Ничего делать не будем (в целом по коду нету вызовов)
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreignId('role_id')->nullable()->constrained()->nullOnDelete();
+        });
     }
 };
