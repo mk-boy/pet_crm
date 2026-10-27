@@ -23,6 +23,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Model::shouldBeStrict(! $this->app->isProduction());
-        Gate::define('access-dashboard', fn (User $user) => $user->roles->isNotEmpty() !== null);
+        Gate::define('access-dashboard', fn (User $user) => $user->roles->isNotEmpty());
     }
 }
