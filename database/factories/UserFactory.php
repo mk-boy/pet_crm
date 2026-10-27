@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -41,5 +42,19 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    /**
+     * Назначить пользователю роли по именам; недостающие роли создаются.
+     */
+    public function withRoles(string ...$roleNames): static
+    {
+        return $this->afterCreating(function (User $user) use ($roleNames) {
+            foreach ($roleNames as $roleName) {
+                Role::firstOrCreate(['role_name' => $roleName]);
+            }
+
+            $user->assignRole(...$roleNames);
+        });
     }
 }
