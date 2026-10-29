@@ -8,4 +8,11 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+
+    server: {
+        host: '0.0.0.0', // Позволяет Vite слушать порты вне контейнера
+        hmr: {
+            host: 'localhost', // Указывает браузеру искать обновления кода на локальном ПК
+        },
+    },
 });

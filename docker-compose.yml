@@ -1,0 +1,92 @@
+services:
+  # Наше Laravel приложение
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: laravel-app
+    container_name: laravel_app
+    restart: unless-stopped
+    working_dir: /var/www
+    entrypoint: ["sh", "-c", "git config --global --add safe.directory /var/www && php-fpm"]
+    volumes:
+      - ./:/var/www
+    networks:
+      - laravel
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  # Веб-сервер Nginx
+  nginx:
+    image: nginx:alpine
+    container_name: laravel_nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    networks:
+      - laravel
+    depends_on:
+      - app
+  
+  # Dev-сервер Vite
+  vite:
+    image: node:22-alpine
+    container_name: laravel_vite
+    restart: unless-stopped
+    working_dir: /var/www
+    init: true
+    command: sh -c "npm ci && exec node_modules/.bin/vite"
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./:/var/www
+      - node_modules:/var/www/node_modules
+
+  # База данных PostgreSQL (Обновлено на 16-alpine)
+  db:
+    image: postgres:16-alpine
+    container_name: laravel_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "54320:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - laravel
+    # Проверка готовности БД, чтобы миграции приложения не падали при старте
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Кэш и очереди Redis
+  redis:
+    image: redis:alpine
+    container_name: laravel_redis
+    restart: unless-stopped
+    ports:
+      - "63790:6379"
+    volumes:
+      - redisdata:/data
+    networks:
+      - laravel
+
+networks:
+  laravel:
+    driver: bridge
+
+volumes:
+  pgdata:
+  redisdata:
+  node_modules:
