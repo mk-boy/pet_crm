@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Role;
 use Illuminate\Database\Seeder;
+use App\Enums\UserRole;
 
 class RoleSeeder extends Seeder
 {
@@ -12,9 +13,9 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::create(['role_name' => 'admin']);
-        Role::create(['role_name' => 'guest']);
-        Role::create(['role_name' => 'manager']);
-        Role::create(['role_name' => 'developer']);
+        Role::create(['role_name' => UserRole::ADMIN->value]);
+        Role::create(['role_name' => UserRole::GUEST->value]);
+        Role::create(['role_name' => UserRole::MANAGER->value]);
+        Role::create(['role_name' => UserRole::DEVELOPER->value]);
     }
 }

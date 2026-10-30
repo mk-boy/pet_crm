@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use App\Enums\UserRole;
 
 class RegisteredUserController extends Controller
 {
@@ -41,7 +42,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-        $user->assignRole('guest');
+        $user->assignRole(UserRole::GUEST);
 
         event(new Registered($user));
 

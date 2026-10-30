@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Enums\UserRole;
 
 /**
  * @extends Factory<User>
@@ -47,10 +48,12 @@ class UserFactory extends Factory
     /**
      * Назначить пользователю роли по именам; недостающие роли создаются.
      */
-    public function withRoles(string ...$roleNames): static
+    public function withRoles(UserRole ...$roleNames): static
     {
-        return $this->afterCreating(function (User $user) use ($roleNames) {
-            foreach ($roleNames as $roleName) {
+        $values = array_map(fn (UserRole $role) => $role->value, $roleNames);
+
+        return $this->afterCreating(function (User $user) use ($values, $roleNames) {
+            foreach ($values as $roleName) {
                 Role::firstOrCreate(['role_name' => $roleName]);
             }
 
