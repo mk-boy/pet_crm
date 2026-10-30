@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserRole;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -77,7 +78,7 @@ describe('admin actions', function () {
 
     test('update changes the user and replaces roles', function (array $roles) {
         $admin = User::factory()->withRoles(...$roles)->create();
-        $target = User::factory()->withRoles('admin')->create();
+        $target = User::factory()->withRoles(UserRole::ADMIN)->create();
 
         $this->actingAs($admin)
             ->put(route('users.update', $target), validUserPayload())
@@ -93,7 +94,7 @@ describe('admin actions', function () {
 
     test('destroy deletes the user', function (array $roles) {
         $admin = User::factory()->withRoles(...$roles)->create();
-        $target = User::factory()->withRoles('guest')->create();
+        $target = User::factory()->withRoles(UserRole::GUEST)->create();
 
         $this->actingAs($admin)
             ->delete(route('users.destroy', $target))
@@ -107,7 +108,7 @@ describe('admin actions', function () {
 
 describe('index filters', function () {
     test('search_query filters by name or email', function () {
-        $admin = User::factory()->withRoles('admin')->create();
+        $admin = User::factory()->withRoles(UserRole::ADMIN)->create();
         User::factory()->create(['name' => 'Alice Smith', 'email' => 'alice@example.com']);
         User::factory()->create(['name' => 'Bob Jones', 'email' => 'bob.mail@example.com']);
         User::factory()->create(['name' => 'Carol White', 'email' => 'carol@example.com']);
@@ -124,8 +125,8 @@ describe('index filters', function () {
     });
 
     test('role_id filters by role', function () {
-        $admin = User::factory()->withRoles('admin')->create();
-        User::factory()->withRoles('guest')->create(['name' => 'Guest Person']);
+        $admin = User::factory()->withRoles(UserRole::ADMIN)->create();
+        User::factory()->withRoles(UserRole::GUEST)->create(['name' => 'Guest Person']);
         User::factory()->create(['name' => 'Roleless Person']);
 
         $this->actingAs($admin)
@@ -137,7 +138,7 @@ describe('index filters', function () {
 
 describe('store validation', function () {
     test('requires all fields', function () {
-        $admin = User::factory()->withRoles('admin')->create();
+        $admin = User::factory()->withRoles(UserRole::ADMIN)->create();
 
         $this->actingAs($admin)
             ->post(route('users.store'), [])
@@ -152,7 +153,7 @@ describe('store validation', function () {
     });
 
     test('rejects invalid values', function (array $overrides, string $field, string $message) {
-        $admin = User::factory()->withRoles('admin')->create(['email' => 'taken@example.com']);
+        $admin = User::factory()->withRoles(UserRole::ADMIN)->create(['email' => 'taken@example.com']);
 
         $this->actingAs($admin)
             ->post(route('users.store'), validUserPayload($overrides))
@@ -169,7 +170,7 @@ describe('store validation', function () {
 
 describe('update validation', function () {
     test('requires name, email and roles but not password', function () {
-        $admin = User::factory()->withRoles('admin')->create();
+        $admin = User::factory()->withRoles(UserRole::ADMIN)->create();
         $target = User::factory()->create();
 
         $this->actingAs($admin)
@@ -179,7 +180,7 @@ describe('update validation', function () {
     });
 
     test('accepts the user own email', function () {
-        $admin = User::factory()->withRoles('admin')->create();
+        $admin = User::factory()->withRoles(UserRole::ADMIN)->create();
         $target = User::factory()->create(['email' => 'target@example.com']);
 
         $this->actingAs($admin)
@@ -188,7 +189,7 @@ describe('update validation', function () {
     });
 
     test('rejects an email of another user', function () {
-        $admin = User::factory()->withRoles('admin')->create(['email' => 'taken@example.com']);
+        $admin = User::factory()->withRoles(UserRole::ADMIN)->create(['email' => 'taken@example.com']);
         $target = User::factory()->create(['email' => 'target@example.com']);
 
         $this->actingAs($admin)
@@ -199,7 +200,7 @@ describe('update validation', function () {
     });
 
     test('rejects a short new password', function () {
-        $admin = User::factory()->withRoles('admin')->create();
+        $admin = User::factory()->withRoles(UserRole::ADMIN)->create();
         $target = User::factory()->create();
 
         $this->actingAs($admin)
@@ -210,7 +211,7 @@ describe('update validation', function () {
 
 describe('password handling', function () {
     test('store saves the password hashed', function () {
-        $admin = User::factory()->withRoles('admin')->create();
+        $admin = User::factory()->withRoles(UserRole::ADMIN)->create();
 
         $this->actingAs($admin)->post(route('users.store'), validUserPayload());
 
@@ -221,7 +222,7 @@ describe('password handling', function () {
     });
 
     test('update keeps the password when it is left blank', function (?string $blankPassword) {
-        $admin = User::factory()->withRoles('admin')->create();
+        $admin = User::factory()->withRoles(UserRole::ADMIN)->create();
         $target = User::factory()->create(['password' => 'old-password']);
 
         $this->actingAs($admin)
@@ -235,7 +236,7 @@ describe('password handling', function () {
     ]);
 
     test('update replaces the password with a hashed new one', function () {
-        $admin = User::factory()->withRoles('admin')->create();
+        $admin = User::factory()->withRoles(UserRole::ADMIN)->create();
         $target = User::factory()->create(['password' => 'old-password']);
 
         $this->actingAs($admin)->put(route('users.update', $target), validUserPayload(['password' => 'new-password']));
