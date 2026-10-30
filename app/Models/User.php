@@ -71,7 +71,7 @@ class User extends Authenticatable
      */
     public function hasRole(UserRole $roleName): bool
     {
-        return $this->roles->contains('role_name', $roleName->value);
+        return $this->roles->contains('role_name', $roleName);
     }
 
     /**
@@ -81,9 +81,7 @@ class User extends Authenticatable
      */
     public function hasAnyRole(array $roleNames): bool
     {
-        $values = array_column($roleNames, 'value');
-
-        return $this->roles->contains(fn (Role $role) => in_array($role->role_name, $values, true));
+        return $this->roles->contains(fn (Role $role) => in_array($role->role_name, $roleNames, true));
     }
 
     /**
@@ -91,11 +89,9 @@ class User extends Authenticatable
      */
     public function assignRole(UserRole ...$roleNames): void
     {
-        $values = array_map(fn (UserRole $role) => $role->value, $roleNames);
+        $roleIds = Role::whereIn('role_name', $roleNames)->pluck('id');
 
-        $roleIds = Role::whereIn('role_name', $values)->pluck('id');
-
-        if (count(array_unique($values)) !== $roleIds->count()) {
+        if (count(array_unique($roleNames, SORT_REGULAR)) !== $roleIds->count()) {
             throw new InvalidArgumentException('Переданы невалидные имена ролей');
         }
 
