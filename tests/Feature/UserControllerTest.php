@@ -14,7 +14,7 @@ function validUserPayload(array $overrides = []): array
         'name' => 'New User',
         'email' => 'new.user@example.com',
         'password' => 'secret-password',
-        'role_ids' => [Role::firstOrCreate(['role_name' => 'guest'])->id],
+        'role_ids' => [Role::firstOrCreate(['role_name' => UserRole::GUEST])->id],
         ...$overrides,
     ];
 }
@@ -62,7 +62,7 @@ describe('admin actions', function () {
 
     test('store creates a user with roles', function (array $roles) {
         $admin = User::factory()->withRoles(...$roles)->create();
-        $adminRole = Role::firstWhere('role_name', 'admin');
+        $adminRole = Role::firstWhere('role_name', UserRole::ADMIN);
 
         $this->actingAs($admin)
             ->post(route('users.store'), validUserPayload(['role_ids' => [$adminRole->id]]))
@@ -130,7 +130,7 @@ describe('index filters', function () {
         User::factory()->create(['name' => 'Roleless Person']);
 
         $this->actingAs($admin)
-            ->get(route('users.index', ['role_id' => Role::firstWhere('role_name', 'guest')->id]))
+            ->get(route('users.index', ['role_id' => Role::firstWhere('role_name', UserRole::GUEST)->id]))
             ->assertSee('Guest Person')
             ->assertDontSee('Roleless Person');
     });

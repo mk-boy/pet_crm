@@ -14,7 +14,7 @@ test('withRoles reuses existing roles instead of duplicating them', function () 
     User::factory()->withRoles(UserRole::ADMIN)->create();
     User::factory()->withRoles(UserRole::ADMIN)->create();
 
-    expect(Role::where('role_name', 'admin')->count())->toBe(1);
+    expect(Role::where('role_name', UserRole::ADMIN)->count())->toBe(1);
 });
 
 test('chained withRoles calls combine roles', function () {
