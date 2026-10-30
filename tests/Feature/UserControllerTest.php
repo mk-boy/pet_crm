@@ -73,7 +73,7 @@ describe('admin actions', function () {
 
         expect($created)->not->toBeNull()
             ->and($created->name)->toBe('New User')
-            ->and($created->roles->pluck('role_name')->all())->toBe(['admin']);
+            ->and($created->roles->pluck('role_name')->all())->toBe([UserRole::ADMIN]);
     })->with('admin_roles');
 
     test('update changes the user and replaces roles', function (array $roles) {
@@ -89,7 +89,7 @@ describe('admin actions', function () {
 
         expect($target->name)->toBe('New User')
             ->and($target->email)->toBe('new.user@example.com')
-            ->and($target->roles->pluck('role_name')->all())->toBe(['guest']);
+            ->and($target->roles->pluck('role_name')->all())->toBe([UserRole::GUEST]);
     })->with('admin_roles');
 
     test('destroy deletes the user', function (array $roles) {

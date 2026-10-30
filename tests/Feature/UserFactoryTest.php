@@ -7,7 +7,7 @@ use App\Models\User;
 test('withRoles assigns all given roles in an empty database', function () {
     $user = User::factory()->withRoles(UserRole::ADMIN, UserRole::GUEST)->create();
 
-    expect($user->roles->pluck('role_name')->sort()->values()->all())->toBe(['admin', 'guest']);
+    expect($user->roles->pluck('role_name')->all())->toEqualCanonicalizing([UserRole::ADMIN, UserRole::GUEST]);
 });
 
 test('withRoles reuses existing roles instead of duplicating them', function () {
@@ -20,5 +20,5 @@ test('withRoles reuses existing roles instead of duplicating them', function () 
 test('chained withRoles calls combine roles', function () {
     $user = User::factory()->withRoles(UserRole::ADMIN)->withRoles(UserRole::GUEST)->create();
 
-    expect($user->roles->pluck('role_name')->sort()->values()->all())->toBe(['admin', 'guest']);
+    expect($user->roles->pluck('role_name')->all())->toEqualCanonicalizing([UserRole::ADMIN, UserRole::GUEST]);
 });

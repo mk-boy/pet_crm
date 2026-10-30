@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserRole;
 use App\Models\Role;
 use App\Models\User;
 
@@ -34,5 +35,5 @@ test('new users get the guest role', function () {
     ]);
 
     expect(User::firstWhere('email', 'test@example.com')->roles->pluck('role_name')->all())
-        ->toBe(['guest']);
+        ->toBe([UserRole::GUEST]);
 });
