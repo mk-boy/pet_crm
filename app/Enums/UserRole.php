@@ -8,4 +8,12 @@ enum UserRole: string
     case GUEST = 'guest';
     case MANAGER = 'manager';
     case DEVELOPER = 'developer';
+
+    /**
+     * Переведенное название роли
+     */
+    public function label(): string
+    {
+        return __("roles.{$this->value}");
+    }
 }
