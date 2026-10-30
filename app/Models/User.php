@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use InvalidArgumentException;
+use App\Enums\UserRole;
 
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
@@ -68,29 +69,33 @@ class User extends Authenticatable
     /**
      * Проверка: есть ли у пользователя нужная роль
      */
-    public function hasRole(string $roleName): bool
+    public function hasRole(UserRole $roleName): bool
     {
-        return $this->roles->contains('role_name', $roleName);
+        return $this->roles->contains('role_name', $roleName->value);
     }
 
     /**
      * Проверка: есть ли у пользователя хотя бы одна из ролей
      *
-     * @param  array<int, string>  $roleNames
+     * @param  array<int, UserRole>  $roleNames
      */
     public function hasAnyRole(array $roleNames): bool
     {
-        return $this->roles->contains(fn (Role $role) => in_array($role->role_name, $roleNames, true));
+        $values = array_column($roleNames, 'value');
+
+        return $this->roles->contains(fn (Role $role) => in_array($role->role_name, $values, true));
     }
 
     /**
      * Назначение ролей пользователю
      */
-    public function assignRole(string ...$roleNames): void
+    public function assignRole(UserRole ...$roleNames): void
     {
-        $roleIds = Role::whereIn('role_name', $roleNames)->pluck('id');
+        $values = array_map(fn (UserRole $role) => $role->value, $roleNames);
+    
+        $roleIds = Role::whereIn('role_name', $values)->pluck('id');
 
-        if (count(array_unique($roleNames)) !== $roleIds->count()) {
+        if (count(array_unique($values)) !== $roleIds->count()) {
             throw new InvalidArgumentException('Переданы невалидные имена ролей');
         }
 
