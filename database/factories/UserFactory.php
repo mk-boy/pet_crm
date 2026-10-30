@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\UserRole;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -47,7 +48,7 @@ class UserFactory extends Factory
     /**
      * Назначить пользователю роли по именам; недостающие роли создаются.
      */
-    public function withRoles(string ...$roleNames): static
+    public function withRoles(UserRole ...$roleNames): static
     {
         return $this->afterCreating(function (User $user) use ($roleNames) {
             foreach ($roleNames as $roleName) {

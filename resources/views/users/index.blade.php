@@ -84,7 +84,7 @@
                         @if ($user->roles)
                             @foreach ($user->roles as $role)
                                 <span class="inline-flex rounded-full bg-label/5 px-2.5 py-0.5 text-sm font-medium">
-                                    {{ __("roles.$role->role_name") }}
+                                    {{ $role->role_name->label() }}
                                 </span>
                             @endforeach
                         @else

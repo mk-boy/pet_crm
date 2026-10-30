@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserRole;
 use App\Models\User;
 
 test('anonymous is redirected to login', function () {
@@ -11,9 +12,9 @@ test('user with any role can open the dashboard', function (array $roles) {
 
     $this->actingAs($user)->get(route('dashboard'))->assertOk();
 })->with([
-    'admin' => [['admin']],
-    'guest' => [['guest']],
-    'admin and guest' => [['admin', 'guest']],
+    'admin' => [[UserRole::ADMIN]],
+    'guest' => [[UserRole::GUEST]],
+    'admin and guest' => [[UserRole::ADMIN, UserRole::GUEST]],
 ]);
 
 test('user without roles is forbidden', function () {
