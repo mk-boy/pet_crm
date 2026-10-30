@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\UserRole;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -13,7 +14,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use InvalidArgumentException;
-use App\Enums\UserRole;
 
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
@@ -92,7 +92,7 @@ class User extends Authenticatable
     public function assignRole(UserRole ...$roleNames): void
     {
         $values = array_map(fn (UserRole $role) => $role->value, $roleNames);
-    
+
         $roleIds = Role::whereIn('role_name', $values)->pluck('id');
 
         if (count(array_unique($values)) !== $roleIds->count()) {
