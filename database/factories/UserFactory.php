@@ -50,10 +50,8 @@ class UserFactory extends Factory
      */
     public function withRoles(UserRole ...$roleNames): static
     {
-        $values = array_map(fn (UserRole $role) => $role->value, $roleNames);
-
-        return $this->afterCreating(function (User $user) use ($values, $roleNames) {
-            foreach ($values as $roleName) {
+        return $this->afterCreating(function (User $user) use ($roleNames) {
+            foreach ($roleNames as $roleName) {
                 Role::firstOrCreate(['role_name' => $roleName]);
             }
 
