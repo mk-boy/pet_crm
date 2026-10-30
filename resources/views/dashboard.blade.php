@@ -1,3 +1,5 @@
+@use('App\Enums\UserRole')
+
 <x-app-layout>
     <x-slot:title>{{ __('menu.dashboard') }}</x-slot:title>
 
@@ -8,7 +10,7 @@
     <x-card>
         <p class="text-sm text-label">{{ __('dashboard.logged_in') }}</p>
 
-        @if (auth()->user()->hasRole(\App\Enums\UserRole::GUEST))
+        @if (auth()->user()->hasRole(UserRole::GUEST))
             <p class="mt-2 text-sm font-bold text-label">{{ __('dashboard.guest_message') }}</p>
         @endif
     </x-card>
