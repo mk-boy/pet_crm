@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\UserRole;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -68,7 +69,7 @@ class User extends Authenticatable
     /**
      * Проверка: есть ли у пользователя нужная роль
      */
-    public function hasRole(string $roleName): bool
+    public function hasRole(UserRole $roleName): bool
     {
         return $this->roles->contains('role_name', $roleName);
     }
@@ -76,7 +77,7 @@ class User extends Authenticatable
     /**
      * Проверка: есть ли у пользователя хотя бы одна из ролей
      *
-     * @param  array<int, string>  $roleNames
+     * @param  array<int, UserRole>  $roleNames
      */
     public function hasAnyRole(array $roleNames): bool
     {
@@ -86,11 +87,11 @@ class User extends Authenticatable
     /**
      * Назначение ролей пользователю
      */
-    public function assignRole(string ...$roleNames): void
+    public function assignRole(UserRole ...$roleNames): void
     {
         $roleIds = Role::whereIn('role_name', $roleNames)->pluck('id');
 
-        if (count(array_unique($roleNames)) !== $roleIds->count()) {
+        if (count(array_unique($roleNames, SORT_REGULAR)) !== $roleIds->count()) {
             throw new InvalidArgumentException('Переданы невалидные имена ролей');
         }
 

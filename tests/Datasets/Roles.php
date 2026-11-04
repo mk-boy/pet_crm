@@ -1,11 +1,13 @@
 <?php
 
+use App\Enums\UserRole;
+
 dataset('admin_roles', [
-    'admin' => [['admin']],
-    'admin and guest' => [['admin', 'guest']],
+    'admin' => [[UserRole::ADMIN]],
+    'admin and guest' => [[UserRole::ADMIN, UserRole::GUEST]],
 ]);
 
 dataset('non_admin_roles', [
-    'guest' => [['guest']],
+    'guest' => [[UserRole::GUEST]],
     'without roles' => [[]],
 ]);
