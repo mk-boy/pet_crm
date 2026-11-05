@@ -8,7 +8,6 @@ services:
     container_name: laravel_app
     restart: unless-stopped
     working_dir: /var/www
-    entrypoint: ["sh", "-c", "git config --global --add safe.directory /var/www && php-fpm"]
     volumes:
       - ./:/var/www
     networks:
@@ -28,10 +27,7 @@ services:
       dockerfile: Dockerfile
     image: laravel-app
     working_dir: /var/www
-    command:
-      - sh
-      - -c
-      - git config --global --add safe.directory /var/www && exec composer install --no-interaction --prefer-dist
+    command: ["composer", "install", "--no-interaction", "--prefer-dist"]
     volumes:
       - ./:/var/www
     networks:
@@ -65,6 +61,8 @@ services:
     volumes:
       - ./:/var/www
       - node_modules:/var/www/node_modules
+    networks:
+      - laravel
 
   # База данных PostgreSQL (Обновлено на 16-alpine)
   db:

@@ -2,6 +2,7 @@ FROM php:8.5-fpm
 
 # Установка системных зависимостей, необходимых для PHP
 RUN apt-get update && apt-get install -y \
+    acl \
     git \
     curl \
     libpng-dev \
@@ -35,5 +36,9 @@ RUN composer dump-autoload --optimize
 # Назначаем права для корректной работы кэша и логов Laravel
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
+COPY docker/entrypoint.sh /usr/local/bin/docker-app-entrypoint
+RUN chmod +x /usr/local/bin/docker-app-entrypoint
+
 EXPOSE 9000
+ENTRYPOINT ["docker-app-entrypoint"]
 CMD ["php-fpm"]
