@@ -14,10 +14,28 @@ services:
     networks:
       - laravel
     depends_on:
+      composer:
+        condition: service_completed_successfully
       db:
         condition: service_healthy
       redis:
         condition: service_started
+
+  # Установка PHP-зависимостей в примонтированную папку проекта до запуска приложения
+  composer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: laravel-app
+    working_dir: /var/www
+    command:
+      - sh
+      - -c
+      - git config --global --add safe.directory /var/www && exec composer install --no-interaction --prefer-dist
+    volumes:
+      - ./:/var/www
+    networks:
+      - laravel
 
   # Веб-сервер Nginx
   nginx:
