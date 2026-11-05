@@ -61,6 +61,8 @@ services:
     volumes:
       - ./:/var/www
       - node_modules:/var/www/node_modules
+    networks:
+      - laravel
 
   # База данных PostgreSQL (Обновлено на 16-alpine)
   db:
